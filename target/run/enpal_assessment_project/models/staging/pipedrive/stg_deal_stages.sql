@@ -1,31 +1,32 @@
 
-      
+      -- back compat for old kwarg name
   
+  
+        
+            
+                
+                
+            
+        
     
 
-  create  table "postgres"."public_pipedrive_staging"."stg_deal_stages__dbt_tmp"
-  
-  
-    as
-  
-  (
     
 
-WITH new_deal_stages_data AS (
-  SELECT
-    stage_id   AS deal_stage_id,
-    stage_name AS deal_stage_name
-  FROM "postgres"."pipedrive_snapshots"."deal_stages_snapshot"
-  WHERE dbt_valid_to IS NULL
-  AND stage_name IS NOT NULL
-)
+    merge into "postgres"."public_pipedrive_staging"."stg_deal_stages" as DBT_INTERNAL_DEST
+        using "stg_deal_stages__dbt_tmp234934341788" as DBT_INTERNAL_SOURCE
+        on (
+                    DBT_INTERNAL_SOURCE.deal_stage_id = DBT_INTERNAL_DEST.deal_stage_id
+                )
 
-SELECT
-  new_deal_stages_data.deal_stage_id,
-  new_deal_stages_data.deal_stage_name
-FROM new_deal_stages_data
+    
+    when matched then update set
+        "deal_stage_id" = DBT_INTERNAL_SOURCE."deal_stage_id","deal_stage_name" = DBT_INTERNAL_SOURCE."deal_stage_name"
+    
+
+    when not matched then insert
+        ("deal_stage_id", "deal_stage_name")
+    values
+        ("deal_stage_id", "deal_stage_name")
 
 
-  );
-  
   
