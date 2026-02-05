@@ -16,7 +16,7 @@
     
 
     merge into "postgres"."public_pipedrive_staging"."stg_deal_activities" as DBT_INTERNAL_DEST
-        using "stg_deal_activities__dbt_tmp234933894828" as DBT_INTERNAL_SOURCE
+        using "stg_deal_activities__dbt_tmp032554113715" as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.deal_activity_id = DBT_INTERNAL_DEST.deal_activity_id
                 ) and (
