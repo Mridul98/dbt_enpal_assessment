@@ -8,25 +8,31 @@
 }}
 WITH marked_deal_changes AS (
   SELECT
-    deal_id,
-    change_time,
-    changed_field_key,
-    new_value,
+    deal_changes.deal_id,
+    deal_changes.change_time,
+    deal_changes.changed_field_key,
+    deal_changes.new_value,
     CASE
-      WHEN changed_field_key = 'stage_id' THEN new_value::INT
+      WHEN deal_changes.changed_field_key = 'stage_id' THEN deal_changes.new_value::INT
     END AS stage_id,
     CASE
-      WHEN changed_field_key = 'user_id' THEN new_value::INT
+      WHEN deal_changes.changed_field_key = 'user_id' THEN deal_changes.new_value::INT
     END AS user_id,
     CASE
-      WHEN changed_field_key = 'add_time' THEN new_value::TIMESTAMP
+      WHEN deal_changes.changed_field_key = 'add_time' THEN deal_changes.new_value::TIMESTAMP
     END AS deal_created_at,
     CASE
-      WHEN changed_field_key = 'lost_reason' THEN new_value::INT
+      WHEN deal_changes.changed_field_key = 'lost_reason' THEN deal_changes.new_value::INT
     END AS deal_lost_reason
 
   FROM
-    {{ source('postgres_public','deal_changes') }}
+    {{ source('postgres_public','deal_changes') }} as deal_changes
+ 
+  {{ filter_new_or_changed_deals(
+      source_relation=source('postgres_public','deal_changes'), 
+      relation_to_join_with='deal_changes',
+      timestamp_column='change_time', entity_column='deal_id') 
+  }}
 ),
 
 grouped_marked_deal_changes AS (
