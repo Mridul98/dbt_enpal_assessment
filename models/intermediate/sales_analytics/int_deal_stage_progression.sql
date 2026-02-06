@@ -13,7 +13,7 @@ WITH deal_changes AS (
     stage_id,
     user_id
 
-  FROM {{ ref('stg_deal_changes') }}
+  FROM {{ ref('stg_pipedrive_deal_changes') }}
   WHERE stage_id IS NOT NULL
 ),
 distinct_deal_stage_entries AS (
@@ -22,7 +22,7 @@ distinct_deal_stage_entries AS (
   stages.deal_stage_name,
   FIRST_VALUE(deal_changes.change_time) OVER (PARTITION BY deal_changes.deal_id, deal_changes.stage_id ORDER BY deal_changes.change_time) AS first_entry_date_for_stage
 FROM deal_changes
-INNER JOIN {{ ref('stg_deal_stages') }} AS stages
+INNER JOIN {{ ref('stg_pipedrive_deal_stages') }} AS stages
   ON deal_changes.stage_id = stages.deal_stage_id
 
 )

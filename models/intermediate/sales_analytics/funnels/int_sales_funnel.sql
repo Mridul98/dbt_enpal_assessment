@@ -5,7 +5,7 @@ with deal_stages as (
         stages.deal_stage_id::text as funnel_step,
         deal_stage_progression.first_entry_date_for_stage as first_entry_date
     from {{ ref('int_deal_stage_progression') }} deal_stage_progression
-    inner join {{ ref('stg_deal_stages') }} as stages
+    inner join {{ ref('stg_pipedrive_deal_stages') }} as stages
         on deal_stage_progression.stage_id = stages.deal_stage_id
 ),
 deal_activities as (

@@ -10,7 +10,7 @@ SELECT
     activity_types.is_deal_activity_type_active,
     activity_types.deal_activity_type_stage
 
-FROM {{ ref('stg_deal_activities') }} deal_activities
-INNER JOIN {{ ref('stg_deal_activity_types') }} activity_types
+FROM {{ ref('stg_pipedrive_deal_activities') }} deal_activities
+INNER JOIN {{ ref('stg_pipedrive_deal_activity_types') }} activity_types
     ON deal_activities.deal_activity_type = activity_types.deal_activity_type
 WHERE activity_types.is_deal_activity_type_active = TRUE
