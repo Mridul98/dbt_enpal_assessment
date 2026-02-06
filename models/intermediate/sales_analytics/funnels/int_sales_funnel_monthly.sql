@@ -1,19 +1,19 @@
-WITH sales_funnel as (
-    SELECT
-        deal_id,
-        funnel_stage_name,
-        funnel_step,
-        (date_trunc('MONTH', first_entry_date) + interval '1 month' - interval '1 day')::date AS funnel_month
-    FROM {{ ref('int_sales_funnel') }}
+WITH sales_funnel AS (
+  SELECT
+    deal_id,
+    funnel_stage_name,
+    funnel_step,
+    (DATE_TRUNC('MONTH', first_entry_date) + INTERVAL '1 month' - INTERVAL '1 day')::DATE AS funnel_month
+  FROM {{ ref('int_sales_funnel') }}
 )
 
 SELECT
-    funnel_month,
-    funnel_stage_name,
-    funnel_step,
-    COUNT(DISTINCT deal_id) AS deals_in_stage
+  funnel_month,
+  funnel_stage_name,
+  funnel_step,
+  COUNT(DISTINCT deal_id) AS deals_in_stage
 FROM sales_funnel
 GROUP BY
-    funnel_month,
-    funnel_stage_name,
-    funnel_step
+  funnel_month,
+  funnel_stage_name,
+  funnel_step

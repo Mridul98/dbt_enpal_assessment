@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: int_sales_funnel
+    description: " Intermediate model for sales funnel. This model captures the current stage and step of each deal in the sales funnel, along with the first date it entered each stage."
+    columns:
+      - name: deal_id
+        data_type: integer
+        description: "The ID of the deal that is being tracked through the sales funnel"
+
+      - name: funnel_stage_name
+        data_type: character varying
+        description: "The name of the stage in the sales funnel that the deal is currently in"
+
+      - name: funnel_step
+        data_type: text
+        description: "The step within the sales funnel that the deal is currently in"
+
+      - name: first_entry_date
+        data_type: timestamp without time zone
+        description: "The first date that the deal entered a specific stage in the sales funnel"
+  
+  - name: int_sales_funnel_monthly
+    description: " Intermediate model for sales funnel monthly view. This model captures the number of deals in each stage of the sales funnel for each month."
+    columns:
+      - name: funnel_month
+        data_type: date
+        description: "The month for which the sales funnel data is being reported"
+
+      - name: funnel_stage_name
+        data_type: character varying
+        description: "The name of the stage in the sales funnel"
+
+      - name: funnel_step
+        data_type: text
+        description: "The step within the sales funnel"
+
+      - name: deals_in_stage
+        data_type: bigint
+        description: "The number of deals in a specific stage for a given month"

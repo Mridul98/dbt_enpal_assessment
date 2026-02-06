@@ -14,4 +14,5 @@ SELECT
   deal_id,
   done             AS is_deal_activity_done,
   due_to           AS deal_activity_due_to
-FROM {{ source('postgres_public','activity') }}
+FROM {{ ref('deal_activity_snapshot') }}
+WHERE dbt_valid_to IS NULL
