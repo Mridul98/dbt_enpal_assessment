@@ -2,8 +2,7 @@ snapshots:
   - name: deal_activity_snapshot
     relation: source('postgres_public', 'activity')
     config:
-      target_schema: pipedrive_snapshots
-      target_database: postgres
+      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
       strategy: check
       check_cols: all
       unique_key: activity_id
@@ -15,12 +14,11 @@ snapshots:
       post_hook: "create index if not exists snap_deal_activity_current_idx \
         on {{ this }} (activity_id) \
         where dbt_valid_to is null"
-        
+
   - name: deal_activity_types_snapshot
     relation: source('postgres_public', 'activity_types')
     config:
-      target_schema: pipedrive_snapshots
-      target_database: postgres
+      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
       strategy: check
       check_cols: all
       unique_key: id
@@ -36,7 +34,7 @@ snapshots:
   - name: deal_fields_snapshot
     relation: source('postgres_public', 'fields')
     config:
-      target_schema: pipedrive_snapshots
+      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
       target_database: postgres
       strategy: check
       check_cols: all
@@ -53,8 +51,7 @@ snapshots:
   - name: deal_users_snapshot
     relation: source('postgres_public', 'users')
     config:
-      target_schema: pipedrive_snapshots
-      target_database: postgres
+      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
       strategy: check
       check_cols: all
       unique_key: id
@@ -70,8 +67,7 @@ snapshots:
   - name: deal_stages_snapshot
     relation: source('postgres_public', 'stages')
     config:
-      target_schema: pipedrive_snapshots
-      target_database: postgres
+      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
       strategy: check
       check_cols: all
       unique_key: stage_id
