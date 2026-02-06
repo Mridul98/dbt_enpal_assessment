@@ -45,7 +45,7 @@ models:
         description: "The stage that the deal activity type belongs to"
   
   - name: int_deal_stage_progression
-    description: " Intermediate model for deal stage progression. This model captures the history of stage changes for each deal, including the stages entered, the users responsible for the changes, and the timestamps of when the changes occurred."
+    description: " Intermediate model to track when deals progress through each stage of your sales pipeline, and who owned them at each stage."
     columns:
       - name: deal_id
         data_type: integer
