@@ -1,1 +1,4 @@
-dbt-venv/
+dbt-venv/*
+logs/*
+target/*
+*.log
