@@ -1,30 +1,23 @@
 
-      -- back compat for old kwarg name
+      
+  
+    
+
+  create  table "postgres"."public_pipedrive_staging"."stg_deal_fields__dbt_tmp"
   
   
-        
-            
-	    
-	    
-            
-        
+    as
+  
+  (
     
 
-    
-
-    merge into "postgres"."public_pipedrive_staging"."stg_deal_fields" as DBT_INTERNAL_DEST
-        using "stg_deal_fields__dbt_tmp032554548678" as DBT_INTERNAL_SOURCE
-        on ((DBT_INTERNAL_SOURCE.deal_field_key = DBT_INTERNAL_DEST.deal_field_key))
-
-    
-    when matched then update set
-        "deal_field_id" = DBT_INTERNAL_SOURCE."deal_field_id","deal_field_key" = DBT_INTERNAL_SOURCE."deal_field_key","deal_field_name" = DBT_INTERNAL_SOURCE."deal_field_name","deal_field_value_options" = DBT_INTERNAL_SOURCE."deal_field_value_options"
-    
-
-    when not matched then insert
-        ("deal_field_id", "deal_field_key", "deal_field_name", "deal_field_value_options")
-    values
-        ("deal_field_id", "deal_field_key", "deal_field_name", "deal_field_value_options")
-
-
+SELECT
+  id                  AS deal_field_id,
+  field_key           AS deal_field_key,
+  name                AS deal_field_name,
+  field_value_options AS deal_field_value_options
+FROM "postgres"."pipedrive_snapshots"."deal_fields_snapshot"
+WHERE dbt_valid_to IS NULL
+  );
+  
   

@@ -1,32 +1,21 @@
 
-      -- back compat for old kwarg name
+      
+  
+    
+
+  create  table "postgres"."public_pipedrive_staging"."stg_deal_lost_reason__dbt_tmp"
   
   
-        
-            
-                
-                
-            
-        
+    as
+  
+  (
     
-
-    
-
-    merge into "postgres"."public_pipedrive_staging"."stg_deal_lost_reason" as DBT_INTERNAL_DEST
-        using "stg_deal_lost_reason__dbt_tmp032554275937" as DBT_INTERNAL_SOURCE
-        on (
-                    DBT_INTERNAL_SOURCE.lost_reason_id = DBT_INTERNAL_DEST.lost_reason_id
-                )
-
-    
-    when matched then update set
-        "lost_reason_id" = DBT_INTERNAL_SOURCE."lost_reason_id","actual_lost_reason" = DBT_INTERNAL_SOURCE."actual_lost_reason"
-    
-
-    when not matched then insert
-        ("lost_reason_id", "actual_lost_reason")
-    values
-        ("lost_reason_id", "actual_lost_reason")
-
-
+SELECT
+  (array_elems ->> 'id')::INT     AS lost_reason_id,
+  (array_elems ->> 'label')::TEXT AS actual_lost_reason
+FROM public.fields,
+  LATERAL JSONB_ARRAY_ELEMENTS(field_value_options) AS array_elems
+WHERE field_key = 'lost_reason'
+  );
+  
   

@@ -35,4 +35,14 @@ models:
       pipedrive:
         +schema: pipedrive_staging
         +materialized: table
-        +tags: [pipedrive, pipedrive_staging]
+        +tags: [pipedrive, pipedrive_staging, sales_analytics]
+    intermediate:
+      sales_analytics:
+        +schema: sales_analytics_intermediate
+        +materialized: table
+        +tags: [sales_analytics, sales_analytics_intermediate]
+    reporting:
+      sales_analytics:
+        +schema: sales_analytics_reporting
+        +materialized: table
+        +tags: [sales_analytics, sales_analytics_reporting]

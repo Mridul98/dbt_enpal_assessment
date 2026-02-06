@@ -15,7 +15,7 @@ WITH marked_deal_changes AS (
       WHEN changed_field_key = 'add_time' THEN new_value::TIMESTAMP
     END AS deal_created_at,
     CASE
-      WHEN changed_field_key = 'lost_reason' THEN new_value::TEXT
+      WHEN changed_field_key = 'lost_reason' THEN new_value::INT
     END AS deal_lost_reason
 
   FROM
@@ -43,5 +43,5 @@ SELECT
   FIRST_VALUE(stage_id) OVER (PARTITION BY deal_id, stage_id_change_count ORDER BY change_time)                 AS stage_id,
   FIRST_VALUE(user_id) OVER (PARTITION BY deal_id, user_id_change_count ORDER BY change_time)                   AS user_id,
   FIRST_VALUE(deal_created_at) OVER (PARTITION BY deal_id, deal_created_at_change_count ORDER BY change_time)   AS deal_created_at,
-  FIRST_VALUE(deal_lost_reason) OVER (PARTITION BY deal_id, deal_lost_reason_change_count ORDER BY change_time) AS deal_lost_reason
+  FIRST_VALUE(deal_lost_reason) OVER (PARTITION BY deal_id, deal_lost_reason_change_count ORDER BY change_time) AS deal_lost_reason_id
 FROM grouped_marked_deal_changes

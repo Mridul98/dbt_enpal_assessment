@@ -15,10 +15,3 @@ SELECT
   new_deal_stages_data.deal_stage_name
 FROM new_deal_stages_data
 
-
-
-  LEFT JOIN "postgres"."public_pipedrive_staging"."stg_deal_stages" AS existing_deal_stages_data
-    ON
-      new_deal_stages_data.deal_stage_id = existing_deal_stages_data.deal_stage_id
-  WHERE existing_deal_stages_data.deal_stage_name IS NULL
-

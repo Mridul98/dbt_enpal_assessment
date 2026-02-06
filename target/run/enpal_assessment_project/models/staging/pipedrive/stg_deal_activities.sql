@@ -1,37 +1,24 @@
 
-      -- back compat for old kwarg name
+      
+  
+    
+
+  create  table "postgres"."public_pipedrive_staging"."stg_deal_activities__dbt_tmp"
   
   
-        
-            
-                
-                
-            
-                
-                
-            
-        
+    as
+  
+  (
     
 
-    
-
-    merge into "postgres"."public_pipedrive_staging"."stg_deal_activities" as DBT_INTERNAL_DEST
-        using "stg_deal_activities__dbt_tmp032554113715" as DBT_INTERNAL_SOURCE
-        on (
-                    DBT_INTERNAL_SOURCE.deal_activity_id = DBT_INTERNAL_DEST.deal_activity_id
-                ) and (
-                    DBT_INTERNAL_SOURCE.deal_id = DBT_INTERNAL_DEST.deal_id
-                )
-
-    
-    when matched then update set
-        "deal_activity_id" = DBT_INTERNAL_SOURCE."deal_activity_id","deal_activity_type" = DBT_INTERNAL_SOURCE."deal_activity_type","deal_activity_assigned_to_user" = DBT_INTERNAL_SOURCE."deal_activity_assigned_to_user","deal_id" = DBT_INTERNAL_SOURCE."deal_id","is_deal_activity_done" = DBT_INTERNAL_SOURCE."is_deal_activity_done","deal_activity_due_to" = DBT_INTERNAL_SOURCE."deal_activity_due_to"
-    
-
-    when not matched then insert
-        ("deal_activity_id", "deal_activity_type", "deal_activity_assigned_to_user", "deal_id", "is_deal_activity_done", "deal_activity_due_to")
-    values
-        ("deal_activity_id", "deal_activity_type", "deal_activity_assigned_to_user", "deal_id", "is_deal_activity_done", "deal_activity_due_to")
-
-
+SELECT
+  activity_id      AS deal_activity_id,
+  type             AS deal_activity_type,
+  assigned_to_user AS deal_activity_assigned_to_user,
+  deal_id,
+  done             AS is_deal_activity_done,
+  due_to           AS deal_activity_due_to
+FROM "postgres"."public"."activity"
+  );
+  
   
