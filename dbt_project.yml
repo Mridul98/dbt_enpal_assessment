@@ -46,3 +46,9 @@ models:
         +schema: sales_analytics_reporting
         +materialized: table
         +tags: [sales_analytics, sales_analytics_reporting]
+
+snapshots:
+  pipedrive:
+    +schema:  "{{ target.schema + '_pipedrive_snapshots' }}"
+    +materialized: snapshot
+    +tags: [pipedrive, pipedrive_snapshots]

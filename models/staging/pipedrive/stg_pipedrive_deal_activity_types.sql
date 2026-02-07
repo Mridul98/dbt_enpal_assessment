@@ -17,5 +17,5 @@ SELECT
   end                             AS deal_activity_type_stage,
   COALESCE(active = 'Yes', FALSE) AS is_deal_activity_type_active,
   type                            AS deal_activity_type
-FROM {{ ref('deal_activity_types_snapshot') }}
+FROM {{ ref('pipedrive_deal_activity_types_snapshot') }}
 WHERE dbt_valid_to IS NULL
