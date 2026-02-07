@@ -6,34 +6,45 @@
     on_schema_change='sync_all_columns'
   )
 }}
+
+{% if is_incremental() %}
+
+WITH max_existing_change_time AS (
+  SELECT MAX(change_time) AS max_change_time
+  FROM {{ this }}
+),
+marked_deal_changes AS (
+
+  -- deals that have changes after the last change_time we have in our table, we want to capture those changes
+  SELECT 
+   {{ transform_deal_changes('deal_changes') }}
+  FROM {{ source('postgres_public','deal_changes') }} deal_changes
+  cross join max_existing_change_time
+  WHERE change_time > max_existing_change_time.max_change_time
+
+  UNION ALL
+
+  -- deals that are new and don't have any changes yet, but we want to capture them as well
+  SELECT 
+    {{ transform_deal_changes('new_deals') }}
+  FROM {{ source('postgres_public','deal_changes') }} new_deals
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM {{ this }}
+    WHERE {{ this }}.deal_id = new_deals.deal_id
+  )
+),
+    
+{% else %}
+-- For the initial run, we want to capture all changes, so no additional filter is needed
 WITH marked_deal_changes AS (
   SELECT
-    deal_changes.deal_id,
-    deal_changes.change_time,
-    deal_changes.changed_field_key,
-    deal_changes.new_value,
-    CASE
-      WHEN deal_changes.changed_field_key = 'stage_id' THEN deal_changes.new_value::INT
-    END AS stage_id,
-    CASE
-      WHEN deal_changes.changed_field_key = 'user_id' THEN deal_changes.new_value::INT
-    END AS user_id,
-    CASE
-      WHEN deal_changes.changed_field_key = 'add_time' THEN deal_changes.new_value::TIMESTAMP
-    END AS deal_created_at,
-    CASE
-      WHEN deal_changes.changed_field_key = 'lost_reason' THEN deal_changes.new_value::INT
-    END AS deal_lost_reason
-
+    {{ transform_deal_changes('deal_changes') }}
   FROM
     {{ source('postgres_public','deal_changes') }} as deal_changes
- 
-  {{ filter_new_or_changed_deals(
-      source_relation=source('postgres_public','deal_changes'), 
-      relation_to_join_with='deal_changes',
-      timestamp_column='change_time', entity_column='deal_id') 
-  }}
 ),
+{% endif %}
+
 
 grouped_marked_deal_changes AS (
   SELECT
