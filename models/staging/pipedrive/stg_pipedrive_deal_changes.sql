@@ -3,7 +3,10 @@
     materialized = 'incremental',
     unique_key = ['deal_id','change_time'],
     incremental_strategy='merge',
-    on_schema_change='sync_all_columns'
+    on_schema_change='sync_all_columns',
+    post_hook = '''CREATE INDEX IF NOT EXISTS idx_stg_change_time_desc
+      ON {{ this }}(change_time DESC)
+      INCLUDE (deal_id);'''
   )
 }}
 
