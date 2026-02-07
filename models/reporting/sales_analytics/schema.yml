@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: rep_sales_funnel_monthly
+    description: "Reporting model for sales funnel monthly view. This model aggregates the number of deals in each funnel step for each month."
+    columns:
+      - name: month
+        data_type: date
+        description: "The month for which the sales funnel data is being reported"
+
+      - name: kpi_name
+        data_type: character varying
+        description: "The name of the KPI being reported."
+
+      - name: funnel_step
+        data_type: text
+        description: "The step within the sales funnel"
+
+      - name: deals_count
+        data_type: bigint
+        description: "The number of deals in a specific funnel step for a given month"

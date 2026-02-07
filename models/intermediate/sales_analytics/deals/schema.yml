@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: int_deal_activities
+    description: " Intermediate model for deal activities. This model captures the current state of deal activities, including their types, assigned users, due dates, and completion status."
+    columns:
+      - name: deal_activity_id
+        data_type: integer
+        description: "Unique identifier for each deal activity"
+
+      - name: deal_activity_type
+        data_type: character varying
+        description: "The type of deal activity"
+
+      - name: deal_activity_assigned_to_user
+        data_type: integer
+        description: "The user ID that the deal activity is assigned to"
+
+      - name: deal_id
+        data_type: integer
+        description: "The ID of the deal that the activity is associated with"
+
+      - name: is_deal_activity_done
+        data_type: boolean
+        description: "Whether the deal activity is marked as done"
+
+      - name: deal_activity_due_to
+        data_type: timestamp without time zone
+        description: "The due date for the deal activity"
+
+      - name: deal_activity_type_id
+        data_type: integer
+        description: "The ID of the deal activity type"
+
+      - name: deal_activity_type_name
+        data_type: character varying
+        description: "The name of the deal activity type"
+
+      - name: is_deal_activity_type_active
+        data_type: boolean
+        description: "Whether the deal activity type is active or not"
+
+      - name: deal_activity_type_stage
+        data_type: text
+        description: "The stage that the deal activity type belongs to"
+  
+  - name: int_deal_stage_progression
+    description: " Intermediate model to track when deals progress through each stage of your sales pipeline, and who owned them at each stage."
+    columns:
+      - name: deal_id
+        data_type: integer
+        description: "The ID of the deal that was changed"
+
+      - name: stage_id
+        data_type: integer
+        description: "The ID of the stage that the deal was moved to"
+
+      - name: user_id
+        data_type: integer
+        description: "The ID of the user who made the stage change"
+
+      - name: first_entry_date_for_stage
+        data_type: timestamp without time zone
+        description: "The first date when the deal entered a specific stage"
+
+      - name: deal_stage_name
+        data_type: character varying
+        description: "The name of the deal stage"
