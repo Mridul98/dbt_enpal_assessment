@@ -36,8 +36,8 @@ snapshots:
     relation: source('postgres_public', 'users')
     config:
       target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
-      strategy: check
-      check_cols: all
+      strategy: timestamp
+      updated_at: modified
       unique_key: id
       hard_deletes: invalidate
       tags: [pipedrive, pipedrive_snapshots]
