@@ -10,7 +10,7 @@ models:
 
       - name: kpi_name
         data_type: character varying
-        description: "The name of the KPI being reported"
+        description: "The name of the KPI being reported."
 
       - name: funnel_step
         data_type: text

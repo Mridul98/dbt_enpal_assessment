@@ -7,6 +7,10 @@ models:
       - name: deal_id
         data_type: integer
         description: "The ID of the deal that is being tracked through the sales funnel"
+      
+      - name: deal_activity_id
+        data_type: integer
+        description: "The ID of the deal activity that corresponds to the current stage and step of the deal in the sales funnel. This field is NULL for the initial stage of the deal before any activities have been completed."
 
       - name: funnel_stage_name
         data_type: character varying
@@ -38,3 +42,14 @@ models:
       - name: deals_in_stage
         data_type: bigint
         description: "The number of deals in a specific stage for a given month"
+
+  - name: int_funnel_kpi_mapping
+    description: "Intermediate model that maps funnel steps to funnel stage names for KPI reporting. This model is used to associate each step in the sales funnel with a specific KPI name that can be used in reporting and analysis."
+    columns:
+      - name: funnel_step
+        data_type: text
+        description: "The step within the sales funnel"
+
+      - name: funnel_stage_name
+        data_type: character varying
+        description: "The name of the stage in the sales funnel that corresponds to a specific funnel step"

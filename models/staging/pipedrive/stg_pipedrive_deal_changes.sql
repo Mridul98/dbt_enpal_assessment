@@ -47,6 +47,7 @@ marked_deal_changes AS (
 ),
     
 {% else %}
+
 -- For the initial run, we want to capture all changes, so no additional filter is needed
 WITH marked_deal_changes AS (
   SELECT
