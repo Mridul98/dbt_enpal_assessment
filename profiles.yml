@@ -36,4 +36,4 @@ enpal_assessment_project:
       threads: 1
       type: postgres
       user: admin
-  target: dev
+  target: sandbox

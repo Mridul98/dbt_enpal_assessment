@@ -4,9 +4,17 @@
     unique_key = ['deal_id','change_time'],
     incremental_strategy='merge',
     on_schema_change='sync_all_columns',
-    post_hook = '''CREATE INDEX IF NOT EXISTS idx_stg_change_time_desc
-      ON {{ this }}(change_time DESC)
-      INCLUDE (deal_id);'''
+    post_hook = [
+      '''CREATE INDEX IF NOT EXISTS idx_composite_deal_id_stage_id
+        ON {{this}} (deal_id, stage_id)
+      ''',
+      '''CREATE INDEX IF NOT EXISTS idx_partial_deal_id_change_time 
+        ON {{this}} (deal_id, change_time) where stage_id IS NOT NULL
+      ''',
+      '''CREATE INDEX IF NOT EXISTS idx_sort_change_time 
+        ON {{this}} (change_time DESC)
+      '''
+    ]  
   )
 }}
 
