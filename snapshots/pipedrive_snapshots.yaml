@@ -1,20 +1,4 @@
 snapshots:
-  - name: deal_activity_snapshot
-    relation: source('postgres_public', 'activity')
-    config:
-      target_schema: "{{ target.schema + '_pipedrive_snapshots' }}"
-      strategy: check
-      check_cols: all
-      unique_key: activity_id
-      hard_deletes: invalidate
-      tags: [pipedrive, pipedrive_snapshots]
-      indexes: [
-        {'columns': ['activity_id', 'dbt_valid_from', 'dbt_valid_to'], 'type': btree}
-      ]
-      post_hook: "create index if not exists snap_deal_activity_current_idx \
-        on {{ this }} (activity_id) \
-        where dbt_valid_to is null"
-
   - name: deal_activity_types_snapshot
     relation: source('postgres_public', 'activity_types')
     config:
