@@ -1,9 +1,22 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key=['funnel_month', 'funnel_step'],
+        incremental_strategy='merge',
+        on_schema_change='sync_all_columns',
+        indexes=[
+            {'columns': ['funnel_month'], 'type': 'btree'},
+            {'columns': ['funnel_month', 'funnel_step'], 'type': 'btree'}
+        ],
+    )
+}}
+
 WITH sales_funnel AS (
   SELECT
     deal_id,
     funnel_stage_name,
     funnel_step,
-    (DATE_TRUNC('MONTH', first_entry_date) + INTERVAL '1 month' - INTERVAL '1 day')::DATE AS funnel_month
+    funnel_month
   FROM {{ ref('int_sales_funnel') }}
 )
 
