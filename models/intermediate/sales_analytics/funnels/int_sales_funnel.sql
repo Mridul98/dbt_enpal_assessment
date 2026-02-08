@@ -14,10 +14,10 @@ WITH deal_stages AS (
   SELECT
     deal_stage_progression.deal_id,
     deal_stage_progression.deal_stage_name,
-    stages.deal_stage_id::TEXT                        AS funnel_step,
-    deal_stage_progression.first_entry_date_for_stage AS first_entry_date
-  FROM {{ ref('int_deal_stage_progression') }} AS deal_stage_progression
-  INNER JOIN {{ ref('stg_pipedrive_deal_stages') }} AS stages
+    stages.deal_stage_id::TEXT                          AS funnel_step,
+    deal_stage_progression.first_entry_date_for_stage   AS first_entry_date
+  FROM {{ ref('int_deal_stage_progression') }}          AS deal_stage_progression
+  INNER JOIN {{ ref('stg_pipedrive_deal_stages') }}     AS stages
     ON deal_stage_progression.stage_id = stages.deal_stage_id
   {% if is_incremental() %}
     WHERE NOT EXISTS (
@@ -56,8 +56,8 @@ deal_activities AS (
 sales_funnel AS (
   SELECT
     deal_id,
-    NULL            AS deal_activity_id,
-    deal_stage_name AS funnel_stage_name,
+    NULL                    AS deal_activity_id,
+    deal_stage_name         AS funnel_stage_name,
     funnel_step,
     first_entry_date
   FROM deal_stages

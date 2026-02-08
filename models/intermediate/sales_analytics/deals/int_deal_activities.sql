@@ -29,7 +29,7 @@ WITH deal_activities AS (
     activity_types.deal_activity_type_name,
     activity_types.is_deal_activity_type_active,
     activity_types.deal_activity_type_stage
-  FROM {{ ref('stg_pipedrive_deal_activities') }} AS deal_activities
+  FROM {{ ref('stg_pipedrive_deal_activities') }}           AS deal_activities
   INNER JOIN {{ ref('stg_pipedrive_deal_activity_types') }} AS activity_types
     ON deal_activities.deal_activity_type = activity_types.deal_activity_type
   {% if is_incremental() %}

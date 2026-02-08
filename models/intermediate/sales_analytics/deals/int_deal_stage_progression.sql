@@ -32,7 +32,7 @@ WITH first_deal_stage_entry AS (
   SELECT
     deal_changes.deal_id,
     deal_changes.stage_id,
-    MIN(deal_changes.change_time) AS first_entry_date_for_stage
+    MIN(deal_changes.change_time)              AS first_entry_date_for_stage
   FROM {{ ref("stg_pipedrive_deal_changes") }} AS deal_changes
   WHERE
     deal_changes.stage_id IS NOT NULL
