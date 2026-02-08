@@ -1,3 +1,24 @@
+-- This model turns a raw “one-change-per-row” log into a readable deal timeline.
+-- Each row in the output represents the **first time a deal got a new value**.
+-- Repeated values are ignored so only meaningful changes remain.
+
+-- ## Input: raw deal change log (example)
+-- | deal_id | change_time           | changed_field | new_value |
+-- |--------:|----------------------|---------------|-----------|
+-- | 881836  | 2024-04-09 21:32:09  | add_time      | 2024-04-09 |
+-- | 881836  | 2024-04-12 21:32:09  | user_id       | 1463 |
+-- | 881836  | 2024-04-17 21:32:09  | user_id       | 1728 |
+-- | 881836  | 2024-04-20 21:32:09  | stage_id      | 1 |
+-- | 881836  | 2024-05-02 21:32:09  | stage_id      | 2 |
+
+-- ## Output: clean deal timeline (example)
+-- | deal_id | change_time           | stage_id | user_id | deal_created_at |
+-- |--------:|----------------------|----------|---------|-----------------|
+-- | 881836  | 2024-04-09 21:32:09  | NULL     | NULL    | 2024-04-09 |
+-- | 881836  | 2024-04-12 21:32:09  | NULL     | 1463    | 2024-04-09 |
+-- | 881836  | 2024-04-17 21:32:09  | NULL     | 1728    | 2024-04-09 |
+-- | 881836  | 2024-04-20 21:32:09  | 1        | 1728    | 2024-04-09 |
+-- | 881836  | 2024-05-02 21:32:09  | 2        | 1728    | 2024-04-09 |
 {{
   config(
     materialized = 'incremental',
